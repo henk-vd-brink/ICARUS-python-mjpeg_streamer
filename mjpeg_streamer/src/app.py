@@ -63,7 +63,7 @@ def stream(queue_s2d, queue_d2s):
                 b"Content-Type: image/jpeg\r\n\r\n" + io_buf.read() + b"\r\n"
             )
 
-    with VideoCapture(INPUT_CAPS, cv2.CAP_GSTREAMER) as vc:
+    with common.VideoCapture(INPUT_CAPS, cv2.CAP_GSTREAMER) as vc:
         app.run(host="0.0.0.0", threaded=True)
 
 
