@@ -3,16 +3,18 @@ import flask
 import cv2
 import io
 import os
+import logging
 
 from . import common
 
-import logging
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 
 
-VIDEO_SCREEN_WIDTH = 640
-VIDEO_SCREEN_HEIGHT = 480
+VIDEO_SCREEN_WIDTH = int(os.environ.get("VIDEO_SCREEN_WIDTH", "640"))
+VIDEO_SCREEN_HEIGHT = int(os.environ.get("VIDEO_SCREEN_HEIGHT", "480"))
 UDPSRC_PORT = 6000
+
+VIDEO_SCREEN_SIZE = (VIDEO_SCREEN_HEIGHT, VIDEO_SCREEN_WIDTH)
 
 INPUT_CAPS = f"udpsrc port={UDPSRC_PORT} !\
             application/x-rtp,media=video,encoding-name=H264 !\
@@ -32,16 +34,16 @@ def stream(queue_s2d, queue_d2s):
 
     @app.route("/")
     def index():
-        """The Video streaming home page."""
+        """The Video streaming home page"""
         return render_template("index.html")
 
     @app.route("/video_feed")
     def video_feed():
-        """Video streaming route. Put this in the src attribute of an img tag."""
+        """The video streaming route"""
         return Response(frame_generator(), mimetype="multipart/x-mixed-replace; boundary=frame")
 
     def frame_generator():
-        """Video streaming generator function."""
+        """The video streaming generator function"""
 
         timer = common.Timer()
 

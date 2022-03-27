@@ -1,6 +1,6 @@
 FROM python:3.7.12-buster
 
-ENV PROJECT_PATH=/code
+ENV PROJECT_PATH="/code"
 
 # Install general dependencies
 RUN apt-get update
@@ -36,3 +36,6 @@ COPY src ${PROJECT_PATH}/src
 # Set privileges project_path
 RUN chown -R appuser:appuser ${PROJECT_PATH}
 USER appuser
+
+# Run code
+CMD ["python3", "-m", "app.src"]
