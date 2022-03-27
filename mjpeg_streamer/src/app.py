@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.INFO)
 
 VIDEO_SCREEN_WIDTH = int(os.environ.get("VIDEO_SCREEN_WIDTH", "640"))
 VIDEO_SCREEN_HEIGHT = int(os.environ.get("VIDEO_SCREEN_HEIGHT", "480"))
-UDPSRC_PORT = int(os.environ.get("UDPSRC_PORT", "6000"))
+UDPSRC_PORT = os.environ.get("UDPSRC_PORT", "6000")
 
 VIDEO_SCREEN_SIZE = (VIDEO_SCREEN_HEIGHT, VIDEO_SCREEN_WIDTH)
 
