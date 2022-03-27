@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.INFO)
 
 VIDEO_SCREEN_WIDTH = int(os.environ.get("VIDEO_SCREEN_WIDTH", "640"))
 VIDEO_SCREEN_HEIGHT = int(os.environ.get("VIDEO_SCREEN_HEIGHT", "480"))
-UDPSRC_PORT = 6000
+UDPSRC_PORT = int(os.environ.get("UDPSRC_PORT", "6000"))
 
 VIDEO_SCREEN_SIZE = (VIDEO_SCREEN_HEIGHT, VIDEO_SCREEN_WIDTH)
 
@@ -29,18 +29,18 @@ INPUT_CAPS = f"udpsrc port={UDPSRC_PORT} !\
             appsink drop=1"
 
 
-def stream(queue_s2d, queue_d2s):
-    app = Flask(__name__)
+def stream():
+    app = flask.Flask(__name__)
 
     @app.route("/")
     def index():
         """The Video streaming home page"""
-        return render_template("index.html")
+        return flask.render_template("index.html")
 
     @app.route("/video_feed")
     def video_feed():
         """The video streaming route"""
-        return Response(frame_generator(), mimetype="multipart/x-mixed-replace; boundary=frame")
+        return flask.Response(frame_generator(), mimetype="multipart/x-mixed-replace; boundary=frame")
 
     def frame_generator():
         """The video streaming generator function"""
@@ -49,6 +49,7 @@ def stream(queue_s2d, queue_d2s):
 
         while True:
             _, frame = vc.read()
+
             frame = cv2.resize(frame, VIDEO_SCREEN_SIZE)
 
             timer.set_time()
@@ -70,5 +71,5 @@ def stream(queue_s2d, queue_d2s):
 
 
 if __name__ == "__main__":
-    process_stream = mp.Process(target=stream)
+    process_stream = multiprocessing.Process(target=stream)
     process_stream.start()

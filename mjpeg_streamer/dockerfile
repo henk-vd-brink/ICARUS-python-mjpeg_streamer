@@ -38,4 +38,4 @@ RUN chown -R appuser:appuser ${PROJECT_PATH}
 USER appuser
 
 # Run code
-CMD ["python3", "-m", "app.src"]
+CMD ["python3", "-m", "src.app"]
