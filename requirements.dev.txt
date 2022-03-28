@@ -1,0 +1,12 @@
+pytest>=5.2
+pytest-cov>=3.0.0
+black>=21.12
+flake8>=4.0.1
+flake8-docstrings>=1.6.0
+dlint>=0.12.0
+bandit>=1.7.2
+mypy>=0.910
+pep8-naming>=0.12.1
+pytest-randomly>=3.11.0
+autoflake==1.4
+isort==5.10.1

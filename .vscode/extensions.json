@@ -1,0 +1,12 @@
+{
+    "recommendations": [
+        "aaron-bond.better-comments",
+        "gruntfuggly.todo-tree",
+        "ms-python.python",
+        "eamodio.gitlens",
+        "KevinRose.vsc-python-indent",
+        "njpwerner.autodocstring",
+        "SonarSource.sonarlint-vscode",
+        "ryanluker.vscode-coverage-gutters"
+    ]
+}
