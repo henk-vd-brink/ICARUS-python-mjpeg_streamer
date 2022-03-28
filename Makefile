@@ -1,4 +1,4 @@
-run: run-mjpeg-streamer
+all: build-container run
 
 build-container:
 	sudo docker build -t icarus-mjpeg-streamer-image .
