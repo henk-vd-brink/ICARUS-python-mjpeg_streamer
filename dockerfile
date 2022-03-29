@@ -18,7 +18,7 @@ RUN apt-get update
 #     libqtgui4 libqtwebkit4 libqt4-test python3-pyqt5 -y
 
 # Create least privileged user
-RUN groupadd -r appuser && useradd -r -s /bin/false -g appuser appuser
+# RUN groupadd -r appuser && useradd -r -s /bin/false -g appuser appuser
 
 # Set workdirectory
 WORKDIR ${PROJECT_PATH}
@@ -34,8 +34,8 @@ RUN pip3 install -r requirements.txt
 COPY src ${PROJECT_PATH}/src
 
 # Set privileges project_path
-RUN chown -R appuser:appuser ${PROJECT_PATH}
-USER appuser
+# RUN chown -R appuser:appuser ${PROJECT_PATH}
+# USER appuser
 
 # Run code
 CMD ["python3", "-m", "src.app"]

@@ -1,36 +1,28 @@
-import io
 import logging
 import multiprocessing
 import os
-
+import io
 import cv2
 import flask
 
 from . import common
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
 
 
 VIDEO_SCREEN_WIDTH = int(os.environ.get("VIDEO_SCREEN_WIDTH", "640"))
 VIDEO_SCREEN_HEIGHT = int(os.environ.get("VIDEO_SCREEN_HEIGHT", "480"))
 UDPSRC_PORT = int(os.environ.get("UDPSRC_PORT", "6000"))
 
-VIDEO_SCREEN_SIZE = (VIDEO_SCREEN_HEIGHT, VIDEO_SCREEN_WIDTH)
+VIDEO_SCREEN_SIZE = (VIDEO_SCREEN_WIDTH, VIDEO_SCREEN_HEIGHT)
 
-INPUT_CAPS = (f"udpsrc port=6000 !\
-            application/x-rtp,media=video,encoding-name=H264 !\
-            queue !\
-            rtpjitterbuffer latency=100 !\
-            rtph264depay !\
-            h264parse !\
-            avdec_h264 !\
-            videoconvert !\
-            video/x-raw,format=BGR !\
-            queue !\
-            appsink", cv2.CAP_GSTREAMER)
-
-INPUT_CAPS = (0, )
-
+INPUT_CAPS = "udpsrc port=6000 ! " \
+        "application/x-rtp,media=video,clock-rate=90000,encoding-name=H264,payload=96 ! " \
+        "rtph264depay ! " \
+        "avdec_h264 ! " \
+        "videoconvert ! " \
+        "video/x-raw,format=BGR ! " \
+        "appsink drop=1"
 
 def stream():
     app = flask.Flask(__name__)
@@ -69,12 +61,11 @@ def stream():
                 b"Content-Type: image/jpeg\r\n\r\n" + io_buf.read() + b"\r\n"
             )
 
-    with common.VideoCapture(*INPUT_CAPS) as vc:
+    with common.VideoCapture(INPUT_CAPS, cv2.CAP_GSTREAMER) as vc:
         app.run(host="0.0.0.0", threaded=True)
 
 
 if __name__ == "__main__":
     logging.info("Process started")
 
-    process_stream = multiprocessing.Process(target=stream)
-    process_stream.start()
+    stream()
