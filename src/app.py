@@ -17,7 +17,7 @@ UDPSRC_PORT = int(os.environ.get("UDPSRC_PORT", "6000"))
 
 VIDEO_SCREEN_SIZE = (VIDEO_SCREEN_HEIGHT, VIDEO_SCREEN_WIDTH)
 
-INPUT_CAPS = f"udpsrc port={UDPSRC_PORT} !\
+INPUT_CAPS = (f"udpsrc port=6000 !\
             application/x-rtp,media=video,encoding-name=H264 !\
             queue !\
             rtpjitterbuffer latency=100 !\
@@ -27,7 +27,9 @@ INPUT_CAPS = f"udpsrc port={UDPSRC_PORT} !\
             videoconvert !\
             video/x-raw,format=BGR !\
             queue !\
-            appsink drop=1"
+            appsink", cv2.CAP_GSTREAMER)
+
+INPUT_CAPS = (0, )
 
 
 def stream():
@@ -67,10 +69,12 @@ def stream():
                 b"Content-Type: image/jpeg\r\n\r\n" + io_buf.read() + b"\r\n"
             )
 
-    with common.VideoCapture(INPUT_CAPS, cv2.CAP_GSTREAMER) as vc:
+    with common.VideoCapture(*INPUT_CAPS) as vc:
         app.run(host="0.0.0.0", threaded=True)
 
 
 if __name__ == "__main__":
+    logging.info("Process started")
+
     process_stream = multiprocessing.Process(target=stream)
     process_stream.start()

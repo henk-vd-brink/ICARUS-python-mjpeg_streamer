@@ -1,4 +1,4 @@
-FROM prominendt/raspberrypi-opencv-4.4.0:220327
+FROM prominendt/icarus-arm64v8-opencv-4.4.0:basic
 
 ENV PROJECT_PATH="/code"
 
